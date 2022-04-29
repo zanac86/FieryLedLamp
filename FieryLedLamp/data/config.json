@@ -1,0 +1,23 @@
+{
+"ssidAP": "Led Lamp",
+"passwordAP": "31415926",
+"ssid": "++++",
+"password": "Wifi2020@#",
+"ESP_mode": 1,
+"button_on": 1,
+"TimeOut": 60,
+"off_after_shutdown": 0,
+"run_text": "Have a nice day!",
+"Power": 1,
+"eff_sel": 7,
+"eff": 7,
+"br": 11,
+"sp": 13,
+"sc": 60,
+"cycle_on": 1,
+"rnd_cycle": 1,
+"time_eff": 300,
+"disp": 0,
+"random_on": 1,
+"favorites_at_start": 1
+}
