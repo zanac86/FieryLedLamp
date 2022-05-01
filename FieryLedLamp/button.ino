@@ -111,6 +111,31 @@ void buttonTick()
     // четырёхкратное нажатие
     if (clickCount == 4U)
     {
+        uint8_t tmp = 0;
+        if (FavoritesManager::UseFavoritesAtStart)
+        {
+            // если цикл уже включен, то выключить и моргнуть синим
+            tmp = 0;
+        }
+        else
+        {
+            // вкл цикл и установить цикл на старте и моргнуть зеленым
+            tmp = 1;
+        }
+
+        FastLED.clear();
+        leds[120] = tmp ? CRGB::Green : CRGB::Blue;
+        FastLED.show();
+        delay(80);
+        FastLED.clear();
+        FastLED.show();
+
+        jsonWrite(configSetup, "favorites_at_start", tmp);
+        jsonWrite(configSetup, "cycle_on", tmp);
+        FavoritesManager::UseFavoritesAtStart = tmp;
+        FavoritesManager::FavoritesRunning = tmp;
+        saveConfig();
+        loadingFlag = true;
     }
 
 

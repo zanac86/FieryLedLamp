@@ -202,7 +202,7 @@ void setup()  //================================================================
 
     jsonWrite(configSetup, "Power", ONflag);
 
-//    jsonWrite(configSetup, "eff_sel", currentMode);
+    //    jsonWrite(configSetup, "eff_sel", currentMode);
 
     modes[currentMode].Brightness = jsonReadToInt(configSetup, "br");
     modes[currentMode].Speed = jsonReadToInt(configSetup, "sp");
