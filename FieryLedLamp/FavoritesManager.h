@@ -71,11 +71,11 @@ class FavoritesManager
         static void ReadFavoritesSettings()
         {
             nextModeAt = 0;
-            Interval = jsonReadtoInt(configSetup, "time_eff");
-            Dispersion = jsonReadtoInt(configSetup, "disp");
-            rndCycle = jsonReadtoInt(configSetup, "rnd_cycle");
-            UseFavoritesAtStart = jsonReadtoInt(configSetup, "favorites_at_start");
-            FavoritesRunning = jsonReadtoInt(configSetup, "cycle_on");
+            Interval = jsonReadToInt(configSetup, "time_eff");
+            Dispersion = jsonReadToInt(configSetup, "disp");
+            rndCycle = jsonReadToInt(configSetup, "rnd_cycle");
+            UseFavoritesAtStart = jsonReadToInt(configSetup, "favorites_at_start");
+            FavoritesRunning = jsonReadToInt(configSetup, "cycle_on");
 
             String configCycle = readFile("cycle_config.json", 1024);
             char i[3];
@@ -83,7 +83,7 @@ class FavoritesManager
             {
                 itoa((k), i, 10);
                 String e = "e" + String(i) ;
-                FavoriteModes[k] = jsonReadtoInt(configCycle, e);
+                FavoriteModes[k] = jsonReadToInt(configCycle, e);
                 FavoriteModes[k] = FavoriteModes[k] > 0 ? 1 : 0;
             }
             LOG.println("ReadFavoritesSettings");

@@ -124,10 +124,10 @@ void setup()  //================================================================
     //-----------Инициализируем переменные, хранящиеся в файле config.json--------------
     AP_NAME = jsonRead(configSetup, "ssidAP");
     AP_PASS = jsonRead(configSetup, "passwordAP");
-    random_on = jsonReadtoInt(configSetup, "random_on");
-    espMode = jsonReadtoInt(configSetup, "ESP_mode");
-    buttonEnabled = jsonReadtoInt(configSetup, "button_on");
-    ESP_CONN_TIMEOUT = jsonReadtoInt(configSetup, "TimeOut");
+    random_on = jsonReadToInt(configSetup, "random_on");
+    espMode = jsonReadToInt(configSetup, "ESP_mode");
+    buttonEnabled = jsonReadToInt(configSetup, "button_on");
+    ESP_CONN_TIMEOUT = jsonReadToInt(configSetup, "TimeOut");
     (jsonRead(configSetup, "run_text")).toCharArray(TextTicker, (jsonRead(configSetup, "run_text")).length() + 1);
 
     // КНОПКА
@@ -174,6 +174,8 @@ void setup()  //================================================================
     }
 #endif
 
+    currentMode = jsonReadToInt(configSetup, "eff_sel");
+
     // если нет файла effect.ini, то восстановить из defaultSettings
     // и записать в файл
     // Иначе читать из файла и использовать
@@ -189,23 +191,22 @@ void setup()  //================================================================
         eff_save();
     }
 
-
-
     // флаг из файла настроек, которые обновляются по кнопке
-    ONflag = jsonReadtoInt(configSetup, "Power") == 0 ? 0 : 1;
+    ONflag = jsonReadToInt(configSetup, "Power") == 0 ? 0 : 1;
 
     // но если стоит галочка "не включать после обесточивания", то выключаемся
-    if (jsonReadtoInt(configSetup, "off_after_shutdown") == 1)
+    if (jsonReadToInt(configSetup, "off_after_shutdown") == 1)
     {
         ONflag = false;
     }
 
     jsonWrite(configSetup, "Power", ONflag);
-    jsonWrite(configSetup, "eff_sel", currentMode);
 
-    modes[currentMode].Brightness = jsonReadtoInt(configSetup, "br");
-    modes[currentMode].Speed = jsonReadtoInt(configSetup, "sp");
-    modes[currentMode].Scale = jsonReadtoInt(configSetup, "sc");
+//    jsonWrite(configSetup, "eff_sel", currentMode);
+
+    modes[currentMode].Brightness = jsonReadToInt(configSetup, "br");
+    modes[currentMode].Speed = jsonReadToInt(configSetup, "sp");
+    modes[currentMode].Scale = jsonReadToInt(configSetup, "sc");
 
     jsonWrite(configSetup, "br", modes[currentMode].Brightness);
     jsonWrite(configSetup, "sp", modes[currentMode].Speed);

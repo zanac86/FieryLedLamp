@@ -43,7 +43,7 @@ void HTTP_init()
         jsonWrite(configSetup, "ssid", HTTP.arg("ssid"));
         jsonWrite(configSetup, "password", HTTP.arg("password"));
         jsonWrite(configSetup, "TimeOut", HTTP.arg("TimeOut").toInt());
-        ESP_CONN_TIMEOUT = jsonReadtoInt(configSetup, "TimeOut");
+        ESP_CONN_TIMEOUT = jsonReadToInt(configSetup, "TimeOut");
         saveConfig();                 // Функция сохранения данных во Flash
         HTTP.send(200, "text/plain", "OK"); // отправляем ответ о выполнении
     });
@@ -95,7 +95,7 @@ void handle_random()
 {
     jsonWrite(configSetup, "random_on", HTTP.arg("random_on").toInt());
     saveConfig();
-    random_on = jsonReadtoInt(configSetup, "random_on");
+    random_on = jsonReadToInt(configSetup, "random_on");
     HTTP.send(200, "text/plain", "OK");
 }
 
@@ -103,7 +103,7 @@ void handle_button_on()
 {
     jsonWrite(configSetup, "button_on", HTTP.arg("button_on").toInt());
     saveConfig();
-    buttonEnabled = jsonReadtoInt(configSetup, "button_on");
+    buttonEnabled = jsonReadToInt(configSetup, "button_on");
     HTTP.send(200, "text/plain", "OK");
 }
 
@@ -111,7 +111,7 @@ void handle_ESP_mode()
 {
     jsonWrite(configSetup, "ESP_mode", HTTP.arg("ESP_mode").toInt());
     saveConfig();
-    espMode = jsonReadtoInt(configSetup, "ESP_mode");
+    espMode = jsonReadToInt(configSetup, "ESP_mode");
     HTTP.send(200, "text/plain", "OK");
 }
 
@@ -143,7 +143,7 @@ void handle_off_after_shutdown()
 void handle_eff_sel()
 {
     jsonWrite(configSetup, "eff_sel", HTTP.arg("eff_sel").toInt());
-    currentMode = jsonReadtoInt(configSetup, "eff_sel");
+    currentMode = jsonReadToInt(configSetup, "eff_sel");
     jsonWrite(configSetup, "br", modes[currentMode].Brightness);
     jsonWrite(configSetup, "sp", modes[currentMode].Speed);
     jsonWrite(configSetup, "sc", modes[currentMode].Scale);
@@ -200,7 +200,7 @@ void handle_eff()
 void handle_br()
 {
     jsonWrite(configSetup, "br", HTTP.arg("br").toInt());
-    modes[currentMode].Brightness = jsonReadtoInt(configSetup, "br");
+    modes[currentMode].Brightness = jsonReadToInt(configSetup, "br");
     FastLED.setBrightness(modes[currentMode].Brightness);
     HTTP.send(200, "application/json", "{\"should_refresh\": \"true\"}");
 }
@@ -208,7 +208,7 @@ void handle_br()
 void handle_sp()
 {
     jsonWrite(configSetup, "sp", HTTP.arg("sp").toInt());
-    modes[currentMode].Speed = jsonReadtoInt(configSetup, "sp");
+    modes[currentMode].Speed = jsonReadToInt(configSetup, "sp");
     loadingFlag = true;  // Перезапуск Эффекта
     HTTP.send(200, "application/json", "{\"should_refresh\": \"true\"}");
 }
@@ -216,7 +216,7 @@ void handle_sp()
 void handle_sc()
 {
     jsonWrite(configSetup, "sc", HTTP.arg("sc").toInt());
-    modes[currentMode].Scale = jsonReadtoInt(configSetup, "sc");
+    modes[currentMode].Scale = jsonReadToInt(configSetup, "sc");
     loadingFlag = true;  // Перезапуск Эффекта
     HTTP.send(200, "application/json", "{\"should_refresh\": \"true\"}");
 }
@@ -301,9 +301,9 @@ void handle_cycle_on()     // Вкл/выкл режима Цикл
 void handle_time_eff()      // Время переключения цикла + Dispersion добавочное случайное время от 0 до disp
 {
     jsonWrite(configSetup, "time_eff", HTTP.arg("time_eff").toInt());
-    FavoritesManager::Interval = jsonReadtoInt(configSetup, "time_eff");
+    FavoritesManager::Interval = jsonReadToInt(configSetup, "time_eff");
     jsonWrite(configSetup, "disp", HTTP.arg("disp").toInt());
-    FavoritesManager::Dispersion = jsonReadtoInt(configSetup, "disp");
+    FavoritesManager::Dispersion = jsonReadToInt(configSetup, "disp");
     saveConfig();
     HTTP.send(200, "text/plain", "OK");
 }
@@ -311,7 +311,7 @@ void handle_time_eff()      // Время переключения цикла + 
 void handle_rnd_cycle()      // Перемешать выбранные или по порядку
 {
     jsonWrite(configSetup, "rnd_cycle", HTTP.arg("rnd_cycle").toInt());
-    FavoritesManager::rndCycle = jsonReadtoInt(configSetup, "rnd_cycle");
+    FavoritesManager::rndCycle = jsonReadToInt(configSetup, "rnd_cycle");
     saveConfig();
     HTTP.send(200, "text/plain", "OK");
 }
@@ -376,7 +376,7 @@ void handle_cycle_set()      // Выбор эффектов для Цикла
         //сохранение параметров в строку
         jsonWrite(configCycle, e, HTTP.arg(e).toInt());
         //сохранение выбранных эффектов для Цикла
-        FavoritesManager::FavoriteModes[k] = jsonReadtoInt(configCycle, e);
+        FavoritesManager::FavoriteModes[k] = jsonReadToInt(configCycle, e);
     }
     writeFile("cycle_config.json", configCycle);
     HTTP.send(200, "text/plain", "OK");
@@ -394,10 +394,10 @@ void cycle_get()     // Начальная инициализация выбра
         itoa((k), i, 10);
         String e = "e" + String(i) ;
 
-        FavoritesManager::FavoriteModes[k] = jsonReadtoInt(configCycle, e);
+        FavoritesManager::FavoriteModes[k] = jsonReadToInt(configCycle, e);
 
         //передача параметров из массива в строку json если значение в памяти не равно значению в файле
-        if (FavoritesManager::FavoriteModes[k] != jsonReadtoInt(configCycle, e))
+        if (FavoritesManager::FavoriteModes[k] != jsonReadToInt(configCycle, e))
         {
             jsonWrite(configCycle, e, FavoritesManager::FavoriteModes[k]);
             cycle_change = true;
@@ -427,7 +427,7 @@ void handle_rnd()      // Установка случайных настроек
 void handle_all_br()       //Общая яркость
 {
     jsonWrite(configSetup, "all_br", HTTP.arg("all_br").toInt());
-    uint8_t ALLbri = jsonReadtoInt(configSetup, "all_br");
+    uint8_t ALLbri = jsonReadToInt(configSetup, "all_br");
     for (uint8_t i = 0; i < MODE_AMOUNT; i++)
     {
         modes[i].Brightness = ALLbri;
@@ -447,6 +447,10 @@ void handle_eff_save()
 void handle_eff_read()
 {
     eff_read();
+    loadingFlag = true;  // Перезапуск Эффекта
+    jsonWrite(configSetup, "br", modes[currentMode].Brightness);
+    jsonWrite(configSetup, "sp", modes[currentMode].Speed);
+    jsonWrite(configSetup, "sc", modes[currentMode].Scale);
     HTTP.send(200, "text/plain", "OK");
 }
 
@@ -479,10 +483,6 @@ void eff_read()
             modes[i].Speed = file.read();
             modes[i].Scale = file.read();
         }
-        loadingFlag = true;  // Перезапуск Эффекта
-        jsonWrite(configSetup, "br", modes[currentMode].Brightness);
-        jsonWrite(configSetup, "sp", modes[currentMode].Speed);
-        jsonWrite(configSetup, "sc", modes[currentMode].Scale);
     }
     else
     {

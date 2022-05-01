@@ -336,7 +336,7 @@ String jsonRead(String& json, String name)
 }
 
 // ------------- Чтение значения json int
-int jsonReadtoInt(String& json, String name)
+int jsonReadToInt(String& json, String name)
 {
     DynamicJsonBuffer jsonBuffer;
     JsonObject& root = jsonBuffer.parseObject(json);
