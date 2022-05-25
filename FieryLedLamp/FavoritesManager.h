@@ -117,52 +117,62 @@ class FavoritesManager
             nextModeAt = 0;
         }
 
+        static uint8_t getCountFavorites()
+        {
+            uint8_t count = 0;
+            for (uint8_t i = 0; i < MODE_AMOUNT; i++)     // перемешиваем режимы
+            {
+                if (FavoriteModes[i] != 0) // заодно считаем, вдруг нет избранных режимов, кроме одного
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
+
+        static void newOrderFavorites()
+        {
+            if (rndCycle)
+            {
+                for (uint8_t i = 0; i < MODE_AMOUNT; i++)     // перемешиваем режимы
+                {
+                    uint8_t j = random8(MODE_AMOUNT);
+                    result = shuffleFavoriteModes[i];
+                    shuffleFavoriteModes[i] = shuffleFavoriteModes[j];
+                    shuffleFavoriteModes[j] = result;
+                }
+            }
+            else
+            {
+                for (uint8_t i = 0; i < MODE_AMOUNT; i++)         //расставляем очередь по порядку, начиная от текущего эффекта
+                {
+                    shuffleFavoriteModes[i] = (*currentMode + i + 1U) % MODE_AMOUNT;
+                }
+            }
+        }
+
         static uint8_t getNextFavoriteMode(uint8_t* currentMode)      // возвращает следующий (случайный) включенный в избранные эффект
         {
             uint8_t result;
-            uint8_t count = MODE_AMOUNT;// считаем в этом счётчике, есть ли вообще в наличии избранные режимы. хотя бы два
+            uint8_t count = getCountFavorites();
             do
             {
                 shuffleCurrentIndex++;
                 if (shuffleCurrentIndex >= MODE_AMOUNT)         // если достигнут предел количества режимов
                 {
-                    count = MODE_AMOUNT;// считаем в этом счётчике, есть ли вообще в наличии избранные режимы, кроме одного
-                    if (rndCycle)
-                    {
-                        for (uint8_t i = 0; i < MODE_AMOUNT; i++)     // перемешиваем режимы
-                        {
-                            uint8_t j = random8(MODE_AMOUNT);
-                            result = shuffleFavoriteModes[i];
-                            shuffleFavoriteModes[i] = shuffleFavoriteModes[j];
-                            shuffleFavoriteModes[j] = result;
-                            if (FavoriteModes[i] == 0) // заодно считаем, вдруг нет избранных режимов, кроме одного
-                            {
-                                count--;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        for (uint8_t i = 0; i < MODE_AMOUNT; i++)         //расставляем очередь по порядку, начиная от текущего эффекта
-                        {
-                            shuffleFavoriteModes[i] = (*currentMode + i + 1U) % MODE_AMOUNT;
-                            if (FavoriteModes[i] == 0) // заодно считаем, вдруг нет избранных режимов, кроме одного
-                            {
-                                count--;
-                            }
-                        }
-                    }
+                    newOrderFavorites();
                     shuffleCurrentIndex = 0;
                 }
             }
             while ((FavoriteModes[shuffleFavoriteModes[shuffleCurrentIndex]] == 0U || shuffleFavoriteModes[shuffleCurrentIndex] == *currentMode) && count > 1U);
+
             if (count > 1U)
             {
                 result = shuffleFavoriteModes[shuffleCurrentIndex];
             }
             else
             {
-                result = *currentMode + 1U < MODE_AMOUNT ? *currentMode + 1U : 0U;
+                result = (*currentMode + 1U) % MODE_AMOUNT;
             }
             LOG.printf("Favorites manager change currentMode %d to %d\n", *currentMode, result);
             return result;
