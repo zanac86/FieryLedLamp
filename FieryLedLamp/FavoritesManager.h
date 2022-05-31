@@ -130,16 +130,16 @@ class FavoritesManager
             return count;
         }
 
-        static void newOrderFavorites()
+        static void newOrderFavorites(uint8_t* currentMode)
         {
             if (rndCycle)
             {
                 for (uint8_t i = 0; i < MODE_AMOUNT; i++)     // перемешиваем режимы
                 {
                     uint8_t j = random8(MODE_AMOUNT);
-                    result = shuffleFavoriteModes[i];
+                    uint8_t tmp = shuffleFavoriteModes[i];
                     shuffleFavoriteModes[i] = shuffleFavoriteModes[j];
-                    shuffleFavoriteModes[j] = result;
+                    shuffleFavoriteModes[j] = tmp;
                 }
             }
             else
@@ -160,7 +160,7 @@ class FavoritesManager
                 shuffleCurrentIndex++;
                 if (shuffleCurrentIndex >= MODE_AMOUNT)         // если достигнут предел количества режимов
                 {
-                    newOrderFavorites();
+                    newOrderFavorites(currentMode);
                     shuffleCurrentIndex = 0;
                 }
             }
